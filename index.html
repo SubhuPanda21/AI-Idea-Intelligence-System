@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Idea Intelligence System</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Cabinet+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="noise-overlay"></div>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">IdeaIntel<span class="logo-accent">.ai</span></span>
+    </div>
+    <div class="header-badge">Decision Intelligence Engine</div>
+  </div>
+</header>
+
+<main class="main">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-tag">RAW IDEAS → ACTIONABLE AI USE-CASES</div>
+    <h1 class="hero-title">
+      Transform<br>
+      <span class="hero-title-accent">Innovation</span><br>
+      Into Intelligence
+    </h1>
+    <p class="hero-sub">Feed unstructured ideas. Get explainable AI use-cases with feasibility scores, implementation paths, and decision intelligence — not just model accuracy.</p>
+  </section>
+
+  <!-- Input Section -->
+  <section class="input-section" id="input-section">
+    <div class="input-card">
+      <div class="input-card-header">
+        <span class="step-label">STEP 01</span>
+        <h2>Describe Your Innovation Idea</h2>
+        <p>Paste anything — a messy thought, a business problem, a half-baked concept. The system will structure it.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Your Raw Idea</label>
+        <textarea id="ideaInput" class="idea-input" placeholder="e.g. We have tons of customer support tickets and our agents spend too much time reading old ones to find answers. I want AI to help but don't know how exactly..."></textarea>
+        <div class="char-count"><span id="charCount">0</span> characters</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label class="form-label">Industry / Domain</label>
+          <select id="industrySelect" class="form-select">
+            <option value="">Select industry...</option>
+            <option>Healthcare & Pharma</option>
+            <option>FinTech & Banking</option>
+            <option>Retail & E-commerce</option>
+            <option>Manufacturing & Supply Chain</option>
+            <option>Education & EdTech</option>
+            <option>Legal & Compliance</option>
+            <option>HR & People Ops</option>
+            <option>Customer Service</option>
+            <option>Marketing & Growth</option>
+            <option>Logistics & Transportation</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group half">
+          <label class="form-label">Organization Size</label>
+          <select id="orgSize" class="form-select">
+            <option value="">Select size...</option>
+            <option>Startup (1–50)</option>
+            <option>SMB (51–500)</option>
+            <option>Mid-market (501–5000)</option>
+            <option>Enterprise (5000+)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Primary Goal</label>
+        <div class="goal-pills" id="goalPills">
+          <button class="pill" data-val="cost-reduction">Cost Reduction</button>
+          <button class="pill" data-val="revenue-growth">Revenue Growth</button>
+          <button class="pill" data-val="efficiency">Efficiency</button>
+          <button class="pill" data-val="customer-exp">Customer Experience</button>
+          <button class="pill" data-val="risk-mgmt">Risk Management</button>
+          <button class="pill" data-val="decision-speed">Decision Speed</button>
+        </div>
+      </div>
+
+      <button class="analyze-btn" id="analyzeBtn" onclick="analyzeIdea()">
+        <span class="btn-text">Analyze Idea</span>
+        <span class="btn-icon">→</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <section class="loading-section hidden" id="loadingSection">
+    <div class="loading-card">
+      <div class="loading-orb"></div>
+      <div class="loading-steps" id="loadingSteps">
+        <div class="loading-step active" id="ls1">⬡ Parsing innovation signal...</div>
+        <div class="loading-step" id="ls2">⬡ Mapping AI solution space...</div>
+        <div class="loading-step" id="ls3">⬡ Running feasibility analysis...</div>
+        <div class="loading-step" id="ls4">⬡ Generating decision intelligence...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results Section -->
+  <section class="results-section hidden" id="resultsSection">
+
+    <!-- Summary Card -->
+    <div class="result-block">
+      <div class="result-block-label">INTELLIGENCE SUMMARY</div>
+      <div class="summary-card">
+        <div class="summary-left">
+          <div class="summary-title" id="summaryTitle">—</div>
+          <div class="summary-desc" id="summaryDesc">—</div>
+          <div class="summary-tags" id="summaryTags"></div>
+        </div>
+        <div class="summary-right">
+          <div class="feasibility-ring-wrap">
+            <svg class="feasibility-ring" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" class="ring-bg"/>
+              <circle cx="60" cy="60" r="50" class="ring-fill" id="feasibilityRing"/>
+            </svg>
+            <div class="ring-label">
+              <div class="ring-score" id="feasibilityScore">—</div>
+              <div class="ring-sublabel">Feasibility</div>
+            </div>
+          </div>
+          <div class="impact-score">
+            <span class="impact-label">Impact</span>
+            <span class="impact-value" id="impactScore">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Use Cases -->
+    <div class="result-block">
+      <div class="result-block-label">AI USE-CASES IDENTIFIED</div>
+      <div class="usecases-grid" id="usecasesGrid"></div>
+    </div>
+
+    <!-- Decision Intelligence -->
+    <div class="result-block">
+      <div class="result-block-label">DECISION INTELLIGENCE</div>
+      <div class="decision-grid" id="decisionGrid"></div>
+    </div>
+
+    <!-- Implementation Roadmap -->
+    <div class="result-block">
+      <div class="result-block-label">IMPLEMENTATION ROADMAP</div>
+      <div class="roadmap" id="roadmap"></div>
+    </div>
+
+    <!-- Risks & Mitigations -->
+    <div class="result-block two-col-block">
+      <div class="col-block">
+        <div class="result-block-label">KEY RISKS</div>
+        <div id="risksList" class="list-items"></div>
+      </div>
+      <div class="col-block">
+        <div class="result-block-label">RECOMMENDED NEXT STEPS</div>
+        <div id="nextStepsList" class="list-items"></div>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <div class="reset-wrap">
+      <button class="reset-btn" onclick="resetSystem()">← Analyze Another Idea</button>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>AI Idea Intelligence System</span>
+  <span class="footer-sep">·</span>
+  <span>Decision Intelligence, Not Just Accuracy</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
